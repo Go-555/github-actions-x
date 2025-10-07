@@ -38,7 +38,9 @@ async function main() {
   console.log('🔐 X OAuth2.0 認証を開始します...');
   console.log('');
   console.log('ブラウザで以下のURLを開いてください:');
-  console.log(url);
+  console.log('');
+  // ターミナルでクリック可能なハイパーリンクとして表示
+  console.log(`\x1b]8;;${url}\x1b\\${url}\x1b]8;;\x1b\\`);
   console.log('');
 
   // ローカルサーバーでコールバックを待機
