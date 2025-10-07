@@ -45,7 +45,7 @@ ${legend.speaking_style}
     const USER_PROMPT = `AIバーテンダー「麦（むぎ）」として、${legend.name}さんのお話を紹介する投稿を作成してください。
 
 【要件】
-- 280文字以内
+- **日本語は140文字以内厳守**（日本語はAPI上2文字カウントのため）
 - 麦が${legend.name}さんについて語るスタイル
 - 「${legend.name}さんはこんなことを言っていました」のような紹介形式
 - ${legend.name}さんの哲学やエピソードを引用

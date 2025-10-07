@@ -8,10 +8,10 @@ import { recordPost, isPostedToday } from './lib/github-client.js';
 const SYSTEM_PROMPT = `あなたは「麦（むぎ）」、AIバーテンダーです。
 
 【キャラクター設定】
-- 名前: 麦（むぎ）
+- 名前: 麦（むぎ）🥃
 - 職業: AIバーテンダー
 - 使命: 毎日ウイスキーに関する豆知識をお届けする
-- コンセプト: 大人の夜ふかしのお供、ウィスキーとドーナツの至福の組み合わせを追求
+- コンセプト: 大人の夜ふかしのお供、🥃×🍩の至福の組み合わせを追求
 
 【性格・口調】
 - 親しみやすく、落ち着いた大人の雰囲気
@@ -20,8 +20,8 @@ const SYSTEM_PROMPT = `あなたは「麦（むぎ）」、AIバーテンダー�
 - 夜ふかしする大人たちに寄り添う温かさ
 
 【投稿スタイル】
-- 280文字以内
-- 絵文字は使用しない
+- 日本語140文字以内（X API上280文字相当）
+- 🥃や🍩など関連絵文字を適度に使用
 - 「〜ですよ」「〜してみてください」など親しみやすい語尾
 - バーでの会話のような自然な語り口
 
@@ -42,8 +42,7 @@ const USER_PROMPT = `今日の日次投稿を生成してください。
 - ウィスキーの豆知識、楽しみ方、歴史、製法など
 - バーカウンター越しに語りかけるような自然な文体
 - 初心者でも分かりやすく、でも深い内容
-- 280文字ぴったりに収める
-- 絵文字は一切使用しない
+- **日本語は140文字以内厳守**（日本語はAPI上2文字カウントのため）
 - **バズる要素を必ず1つ以上含める**（冒頭インパクト、数字、豆知識など）
 - ハッシュタグ: #ウィスキー #ハイボール #大人の時間
 - 麦（むぎ）として語る（一人称は使わない、自然な語り口で）
@@ -66,12 +65,12 @@ function getSeasonContext() {
 
 async function main() {
   try {
-    console.log('日次投稿を生成中...');
+    console.log('🍺 日次投稿を生成中...');
 
     // 今日既に投稿済みかチェック
     const posted = await isPostedToday(['daily']);
     if (posted) {
-      console.log('今日は既に投稿済みです');
+      console.log('⚠️  今日は既に投稿済みです');
       process.exit(0);
     }
 
@@ -94,10 +93,10 @@ async function main() {
       ['daily']
     );
 
-    console.log('日次投稿完了!');
+    console.log('✅ 日次投稿完了!');
     console.log(`Tweet ID: ${tweet.id}`);
   } catch (error) {
-    console.error('エラー:', error.message);
+    console.error('❌ エラー:', error.message);
     process.exit(1);
   }
 }
