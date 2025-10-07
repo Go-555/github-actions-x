@@ -16,12 +16,28 @@ export function createXClient() {
  * OAuth2.0 リフレッシュトークンから新しいアクセストークンを取得
  */
 export async function refreshAccessToken() {
+  const refreshToken = process.env.X_OAUTH2_REFRESH_TOKEN;
+
+  if (!refreshToken) {
+    throw new Error('X_OAUTH2_REFRESH_TOKEN が設定されていません');
+  }
+
+  console.log('🔄 アクセストークンを更新中...');
+
   const client = createXClient();
 
-  const { client: refreshedClient, accessToken, refreshToken } =
-    await client.refreshOAuth2Token(process.env.X_OAUTH2_REFRESH_TOKEN);
+  try {
+    const { client: refreshedClient, accessToken, refreshToken: newRefreshToken } =
+      await client.refreshOAuth2Token(refreshToken);
 
-  return { client: refreshedClient, accessToken, refreshToken };
+    console.log('✅ アクセストークン更新成功');
+
+    return { client: refreshedClient, accessToken, refreshToken: newRefreshToken };
+  } catch (error) {
+    console.error('❌ アクセストークン更新エラー:', error.message);
+    console.error('エラー詳細:', error);
+    throw new Error(`OAuth2トークン更新失敗: ${error.message}`);
+  }
 }
 
 /**
@@ -38,10 +54,29 @@ export async function postToX(text) {
     throw new Error(`投稿テキストが280文字を超えています: ${text.length}文字`);
   }
 
-  const { client } = await refreshAccessToken();
+  console.log('📤 X に投稿中...');
 
-  const tweet = await client.v2.tweet(text);
+  try {
+    const { client } = await refreshAccessToken();
 
-  console.log('✅ 投稿成功:', tweet.data.id);
-  return tweet.data;
+    const tweet = await client.v2.tweet(text);
+
+    console.log('✅ 投稿成功:', tweet.data.id);
+    return tweet.data;
+  } catch (error) {
+    console.error('❌ 投稿エラー:', error.message);
+
+    // エラーの詳細情報を出力
+    if (error.data) {
+      console.error('エラーデータ:', JSON.stringify(error.data, null, 2));
+    }
+    if (error.code) {
+      console.error('エラーコード:', error.code);
+    }
+    if (error.rateLimit) {
+      console.error('レート制限:', error.rateLimit);
+    }
+
+    throw new Error(`X投稿失敗 (${error.code || 'UNKNOWN'}): ${error.message}`);
+  }
 }
