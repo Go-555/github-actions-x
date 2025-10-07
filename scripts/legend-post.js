@@ -42,13 +42,21 @@ ${legend.speaking_style}
 
 この人物になりきって、ウィスキーについての知恵や哲学を語ってください。`;
 
-    const USER_PROMPT = `今日のフォロワーに向けて、ウィスキー作りの哲学や人生の教訓を語ってください。
+    const USER_PROMPT = `AIバーテンダー「麦（むぎ）」として、${legend.name}さんのお話を紹介する投稿を作成してください。
 
 【要件】
 - 280文字以内
-- ${legend.name}らしい語り口で
-- 具体的なエピソードや製法の話を交えて
-- ハッシュタグ: #${legend.distillery} #日本のウィスキー #${legend.name}
+- 麦が${legend.name}さんについて語るスタイル
+- 「${legend.name}さんはこんなことを言っていました」のような紹介形式
+- ${legend.name}さんの哲学やエピソードを引用
+- **バズる要素を含める**（具体的な年数、感動的なエピソード、名言など）
+- ハッシュタグ: #${legend.distillery} #日本のウィスキー #ウィスキーの父
+
+【バズる投稿の要素（必ず1つ以上含める）】
+- 具体的な数字や年代
+- 感動的なストーリー
+- 思わずメモしたくなる名言
+- 知らなかった歴史的エピソード
 
 【今日の日付】
 ${new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}

@@ -25,7 +25,7 @@ export async function generateText(systemPrompt, userPrompt, maxTokens = 1024) {
   const client = createClaudeClient();
 
   const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-5-20250929',
     max_tokens: maxTokens,
     system: systemPrompt,
     messages: [
