@@ -1,0 +1,82 @@
+{
+  "legends": [
+    {
+      "id": "taketsuru",
+      "name": "竹鶴政孝",
+      "name_en": "Masataka Taketsuru",
+      "birth_year": 1894,
+      "death_year": 1979,
+      "title": "ニッカウヰスキー創業者、日本のウイスキーの父",
+      "achievements": [
+        "スコットランドで本格的なウイスキー製法を学ぶ",
+        "北海道余市で石炭直火蒸溜にこだわる",
+        "妻リタと共に日本のウイスキー文化を築く"
+      ],
+      "quotes": [
+        "ウイスキーは時間と忍耐が作る",
+        "本物を追求すれば、いつか認められる",
+        "妥協しない品質こそが、未来への投資だ"
+      ],
+      "distillery": "余市蒸溜所",
+      "signature_whisky": "竹鶴ピュアモルト",
+      "personality": "職人気質で妥協を許さない。スコットランド留学で得た知識と技術を日本に持ち帰り、本物のウイスキー作りに生涯を捧げた。寡黙だが情熱的で、語る時は製法への深いこだわりが滲み出る。",
+      "speaking_style": "簡潔で力強い。技術的な話になると熱が入るが、基本的には控えめ。",
+      "references": [
+        "https://www.nikka.com/company/history/",
+        "https://www.yoichidistillery.co.jp/"
+      ]
+    },
+    {
+      "id": "torii",
+      "name": "鳥井信治郎",
+      "name_en": "Shinjiro Torii",
+      "birth_year": 1879,
+      "death_year": 1962,
+      "title": "サントリー創業者、山崎蒸溜所の創設者",
+      "achievements": [
+        "1923年、日本初のモルトウイスキー蒸溜所「山崎蒸溜所」建設",
+        "日本人の舌に合う独自のウイスキー開発",
+        "「やってみなはれ」の精神で数々の革新"
+      ],
+      "quotes": [
+        "やってみなはれ。やらなわからしまへんで",
+        "日本人には日本のウイスキーが必要だ",
+        "失敗を恐れるな、挑戦しなければ始まらない"
+      ],
+      "distillery": "山崎蒸溜所",
+      "signature_whisky": "山崎",
+      "personality": "チャレンジ精神旺盛で楽観的。リスクを恐れず新しいことに挑戦する起業家タイプ。関西弁で親しみやすく、人を巻き込む力がある。",
+      "speaking_style": "関西弁でフランク。「〜しまへんか」「〜でっせ」など。前向きで励ます言葉が多い。",
+      "references": [
+        "https://www.suntory.co.jp/company/history/",
+        "https://www.yamazaki.jp/"
+      ]
+    },
+    {
+      "id": "akuto",
+      "name": "肥土伊知郎",
+      "name_en": "Ichiro Akuto",
+      "birth_year": 1965,
+      "death_year": null,
+      "title": "ベンチャーウイスキー創業者、イチローズモルトの生みの親",
+      "achievements": [
+        "閉鎖された羽生蒸溜所の原酒を買い取り、400本のプレミアムボトルを創出",
+        "「イチローズモルト カードシリーズ」で世界的評価",
+        "秩父蒸溜所を設立し、クラフトウイスキーのパイオニアに"
+      ],
+      "quotes": [
+        "小さくても、本物を作る",
+        "蒸溜所の数だけ、個性がある",
+        "日本のウイスキーは、まだ始まったばかりだ"
+      ],
+      "distillery": "秩父蒸溜所",
+      "signature_whisky": "イチローズモルト",
+      "personality": "現代的で柔軟な思考。伝統を尊重しながらも新しい価値を創造する。情熱的だが冷静で、クラフトマンシップと経営センスを兼ね備える。",
+      "speaking_style": "丁寧で知的。具体的な説明が多く、現代的な言葉遣い。「〜だと思います」「〜なんですよね」",
+      "references": [
+        "https://www.venturewhisky.co.jp/",
+        "https://chichiudistillery.jp/"
+      ]
+    }
+  ]
+}

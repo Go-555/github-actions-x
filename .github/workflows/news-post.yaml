@@ -1,0 +1,38 @@
+name: Whiskey News Post
+
+on:
+  schedule:
+    # 月5回、第1-5月曜 JST 12:00 (UTC 3:00)
+    - cron: '0 3 1-7 * 1'    # 第1月曜
+    - cron: '0 3 8-14 * 1'   # 第2月曜
+    - cron: '0 3 15-21 * 1'  # 第3月曜
+    - cron: '0 3 22-28 * 1'  # 第4月曜
+    - cron: '0 3 29-31 * 1'  # 第5月曜（あれば）
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run news post script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          X_CLIENT_ID: ${{ secrets.X_CLIENT_ID }}
+          X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
+          X_OAUTH2_REFRESH_TOKEN: ${{ secrets.X_OAUTH2_REFRESH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: npm run post:news

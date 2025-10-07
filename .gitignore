@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.local
+*.log
+.DS_Store
+.tmp/
+dist/
+coverage/
+.claude/
+
+# note.com ログイン状態（機密情報）
+.note-state.json
+
+# Playwright
+playwright/.cache/
+test-results/
+playwright-report/
