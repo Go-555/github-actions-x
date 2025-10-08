@@ -31,7 +31,7 @@ X API Free プランで完全自動運用するAIエージェント。Claude API
 
 ## 🛠️ セットアップ
 
-### 1. 環境変数の設定
+### 1. 必須の環境変数設定
 
 GitHub リポジトリの Settings → Secrets and variables → Actions で以下を設定：
 
@@ -42,6 +42,16 @@ GitHub リポジトリの Settings → Secrets and variables → Actions で以�
 | `X_CLIENT_SECRET` | X API Client Secret | https://developer.x.com/ |
 | `X_OAUTH2_REFRESH_TOKEN` | OAuth2 リフレッシュトークン | [OAuth2認証](#x-oauth2認証) |
 | `NOTE_STORAGE_STATE_JSON` | note.com ログイン状態 | [note認証](#note認証) |
+
+### 1-2. リフレッシュトークン自動更新（オプション）
+
+X APIのリフレッシュトークンを自動更新したい場合、追加で以下を設定：
+
+| 変数名 | 説明 | 取得方法 |
+|--------|------|---------|
+| `SECRET_UPDATE_TOKEN` | GitHub Personal Access Token | [PAT作成方法](./SETUP.md#3-3-リフレッシュトークン自動更新オプション) |
+
+**メリット**: 一度設定すれば、リフレッシュトークンの再認証が不要になります。
 
 ### 2. X OAuth2認証
 
@@ -77,9 +87,10 @@ npm run login:note
 ├── scripts/
 │   ├── lib/                   # 共通ユーティリティ
 │   │   ├── claude-client.js   # Claude API
-│   │   ├── x-client.js        # X API
+│   │   ├── x-client.js        # X API（リフレッシュトークン自動更新対応）
 │   │   ├── github-client.js   # GitHub API（重複防止機能強化済み）
-│   │   └── note-client.js     # note.com API（Playwright）
+│   │   ├── note-client.js     # note.com API（Playwright）
+│   │   └── secret-updater.js  # GitHub Secrets自動更新
 │   ├── auth/                  # 認証スクリプト
 │   │   ├── get-oauth-token.js # X OAuth2認証
 │   │   └── login-note.js      # note.comログイン
@@ -138,16 +149,32 @@ git push origin main
 
 - GitHub Actions の実行履歴を確認
 - Secrets が正しく設定されているか確認
+- ワークフローファイルに構文エラーがないか確認
 
-### OAuth トークンエラー
+### 403 Forbidden エラー
 
-- リフレッシュトークンが期限切れの可能性
+**原因**:
+1. **文字数超過** - 日本語は140文字まで（X APIでは2文字カウント）
+2. **権限不足** - X Developer Portal で Read and Write 権限を確認
+3. **Elevated Access** - Free tierで必要な場合がある
+
+### OAuth トークンエラー（400 Bad Request）
+
+- リフレッシュトークンが無効または期限切れ
 - `scripts/auth/get-oauth-token.js` で再取得
+- **自動更新を有効化している場合**は自動で解決
+
+### リフレッシュトークン自動更新が失敗
+
+- `SECRET_UPDATE_TOKEN` の権限を確認（Secrets: Read and write）
+- トークンの有効期限を確認
 
 ### API制限エラー
 
 - X API Free プラン: 月500投稿、月100読み取り
 - Claude API: 使用量を確認
+
+詳細は [SETUP.md](./SETUP.md#6-トラブルシューティング) を参照。
 
 ## 📚 参考リンク
 

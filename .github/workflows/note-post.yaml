@@ -9,6 +9,9 @@ on:
 jobs:
   post:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
 
     steps:
       - name: Checkout
@@ -33,6 +36,6 @@ jobs:
           X_CLIENT_SECRET: ${{ secrets.X_CLIENT_SECRET }}
           X_OAUTH2_REFRESH_TOKEN: ${{ secrets.X_OAUTH2_REFRESH_TOKEN }}
           NOTE_STORAGE_STATE_JSON: ${{ secrets.NOTE_STORAGE_STATE_JSON }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SECRET_UPDATE_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: npm run post:note

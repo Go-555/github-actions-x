@@ -60,7 +60,7 @@ node scripts/auth/get-oauth-token.js
 2. Settings → Secrets and variables → Actions
 3. 「New repository secret」
 
-### 3-2. 以下の4つを登録
+### 3-2. 必須 Secrets（4つ）
 
 | Name | Value |
 |------|-------|
@@ -69,7 +69,32 @@ node scripts/auth/get-oauth-token.js
 | `X_CLIENT_SECRET` | X API の Client Secret |
 | `X_OAUTH2_REFRESH_TOKEN` | OAuth2 で取得したリフレッシュトークン |
 
-**注意**: `GITHUB_TOKEN` は自動生成されるので設定不要
+### 3-3. リフレッシュトークン自動更新（オプション）
+
+リフレッシュトークンを自動更新する場合は、追加で以下を設定：
+
+**Personal Access Token (PAT) の作成：**
+
+1. GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens
+2. Generate new token
+3. 設定内容：
+   ```
+   Token name: SECRET_UPDATE_TOKEN
+   Expiration: 90 days 以上推奨
+   Repository access: Only select repositories → github-actions-x
+
+   Repository permissions:
+   ✅ Secrets: Read and write  ← 重要！
+   ✅ Metadata: Read-only (自動選択)
+   ```
+4. トークンをコピー（一度しか表示されません）
+5. GitHub Secrets に登録：
+
+| Name | Value |
+|------|-------|
+| `SECRET_UPDATE_TOKEN` | 作成した Personal Access Token |
+
+これにより、X API のリフレッシュトークンが自動更新され、再認証が不要になります。
 
 ## 4. ローカルテスト
 
@@ -131,17 +156,28 @@ npm run post:pairing
 
 ## 6. トラブルシューティング
 
-### エラー: "Invalid OAuth token"
+### エラー: "Invalid OAuth token" / 400 Bad Request
 
-→ リフレッシュトークンが期限切れ。再取得してください。
+→ リフレッシュトークンが期限切れまたは無効。再取得してください。
 
 ```bash
 node scripts/auth/get-oauth-token.js
 ```
 
+新しいトークンを GitHub Secrets の `X_OAUTH2_REFRESH_TOKEN` に上書き保存。
+
+**自動更新を有効化している場合**は、この問題は発生しません。
+
+### エラー: 403 Forbidden "You are not permitted to perform this action"
+
+原因：
+1. **文字数オーバー** - 日本語は140文字まで（X APIでは2文字カウント）
+2. **権限不足** - X Developer Portal で Read and Write 権限を確認
+3. **Elevated Access不足** - Free tierで投稿が拒否される場合、Elevated Access申請が必要
+
 ### エラー: "Rate limit exceeded"
 
-→ X API Free プランの制限（月500投稿）に達しています。翌月まで待つか、Basic プランにアップグレード。
+→ X API Free プランの制限（月500投稿、100リード）に達しています。翌月まで待つか、Basic プランにアップグレード。
 
 ### エラー: "ANTHROPIC_API_KEY is not set"
 
@@ -152,6 +188,17 @@ node scripts/auth/get-oauth-token.js
 - Actions が有効化されているか確認
 - cron の時刻が正しいか確認（UTC表記）
 - ワークフローファイルに構文エラーがないか確認
+- 無効なpermissions設定（`secrets: write`など）がないか確認
+
+### GitHub Issues への記録が失敗（403 Error）
+
+→ ワークフローに `issues: write` 権限が設定されているか確認。
+
+### リフレッシュトークン自動更新が失敗
+
+→ `SECRET_UPDATE_TOKEN` の権限を確認：
+- Secrets: Read and write が設定されているか
+- トークンの有効期限が切れていないか
 
 ## 7. 運用開始
 
