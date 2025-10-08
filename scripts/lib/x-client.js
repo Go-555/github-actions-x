@@ -1,4 +1,5 @@
 import { TwitterApi } from 'twitter-api-v2';
+import { updateGitHubSecret } from './secret-updater.js';
 
 /**
  * X API クライアントを初期化
@@ -14,6 +15,7 @@ export function createXClient() {
 
 /**
  * OAuth2.0 リフレッシュトークンから新しいアクセストークンを取得
+ * 新しいリフレッシュトークンをGitHub Secretsに自動保存
  */
 export async function refreshAccessToken() {
   const refreshToken = process.env.X_OAUTH2_REFRESH_TOKEN;
@@ -31,6 +33,11 @@ export async function refreshAccessToken() {
       await client.refreshOAuth2Token(refreshToken);
 
     console.log('✅ アクセストークン更新成功');
+
+    // 新しいリフレッシュトークンをGitHub Secretsに保存
+    if (newRefreshToken && newRefreshToken !== refreshToken) {
+      await updateGitHubSecret('X_OAUTH2_REFRESH_TOKEN', newRefreshToken);
+    }
 
     return { client: refreshedClient, accessToken, refreshToken: newRefreshToken };
   } catch (error) {

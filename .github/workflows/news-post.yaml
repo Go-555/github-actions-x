@@ -13,6 +13,9 @@ on:
 jobs:
   post:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      secrets: write
 
     steps:
       - name: Checkout
