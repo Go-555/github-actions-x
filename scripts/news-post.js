@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { generateText } from './lib/claude-client.js';
 import { postToX } from './lib/x-client.js';
 import { recordPost, getPostedIssues } from './lib/github-client.js';
+import { MUGI_SYSTEM_PROMPT } from './lib/mugi-prompt.js';
 import * as cheerio from 'cheerio';
 
 // ウィスキーニュースソース
@@ -90,25 +91,7 @@ async function main() {
     }
 
     // ニュース投稿を生成
-    const SYSTEM_PROMPT = `あなたは「麦（むぎ）」、AIバーテンダーです。
-
-【キャラクター設定】
-- 名前: 麦（むぎ）🥃
-- 職業: AIバーテンダー
-- 役割: ウィスキー業界のニュースをお客さんに紹介
-
-【性格・口調】
-- バーテンダーらしい丁寧でフランクな語り口
-- 「こんなニュースが入ってきました」のような自然な紹介
-- 大人の夜ふかしに寄り添う温かさ
-
-【バズる投稿の要素（必ず1つ以上含める）】
-1. 冒頭の一文がインパクト大（驚き、速報感）
-2. 具体的な数字（価格、年数、本数など）
-3. 調べるのがめんどくさい情報（最新ニュース）
-4. 有益性の高い情報（購入可能な情報、発売日など）`;
-
-    const USER_PROMPT = `AIバーテンダー「麦（むぎ）」として、以下のウィスキーニュースをお客さんに紹介してください。
+    const USER_PROMPT = `以下のウィスキーニュースをお客さんに紹介してください。
 
 【ニュース】
 タイトル: ${news.title}
@@ -125,7 +108,7 @@ async function main() {
 
 投稿テキストのみを出力してください。`;
 
-    const postText = await generateText(SYSTEM_PROMPT, USER_PROMPT, 512);
+    const postText = await generateText(MUGI_SYSTEM_PROMPT, USER_PROMPT, 512);
 
     console.log('生成された投稿:');
     console.log('---');

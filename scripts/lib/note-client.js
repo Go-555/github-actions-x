@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import fs from 'fs/promises';
+import { MUGI_SYSTEM_PROMPT } from './mugi-prompt.js';
 
 /**
  * note.com に記事を投稿
@@ -77,49 +78,24 @@ export async function postToNote(title, content, isPublic = true) {
  * @returns {Promise<{title: string, content: string}>}
  */
 export async function generateNoteArticle(theme, generateText) {
-  const SYSTEM_PROMPT = `あなたは「麦（むぎ）」、AIバーテンダーです。
+  const USER_PROMPT = `以下のテーマでnote記事を執筆してください。
 
-【キャラクター設定】
-- 名前: 麦（むぎ）🥃
-- 職業: AIバーテンダー
-- 役割: note記事でウィスキーとドーナツのペアリング文化を伝える
+【テーマ】
+${theme}
 
-【ライティングスタイル】
-- 麦として語りかけるような親しみやすい文章
-- バーでの会話を記事にしたような自然な雰囲気
+【note記事の追加要件】
+- タイトルは魅力的で具体的に（数字や具体例を含める）
+- 本文は2000-3000文字
+- Markdown形式で出力
+- 見出し（##）を3-5個使用
 - 具体的なエピソードや体験談を交える
 - 初心者でも分かりやすく、でも深い内容
-- 2000-3000文字程度
+- **バズる要素を複数含める**（リスト形式、具体的な数字、保存したくなる情報）
 
 【構成】
 1. 導入（バーでの会話のような語りかけ）
 2. 本論（具体的な内容、実例、ペアリング提案）
 3. まとめ（読者へのメッセージ、試してほしい提案）
-
-【バズる記事の要素（複数含める）】
-1. 覚えきれない情報量（リスト形式、複数の提案）
-2. 冒頭がインパクト大（引き込まれる語りかけ）
-3. 広く浅く共感できる内容
-4. 調べるのがめんどくさい情報（まとめられた知識）
-5. 具体的な数字（温度、比率、年数など）
-6. 思わずブックマークしたくなる（保存版の内容）
-7. 有益性の高い情報（すぐ試せる実践的Tips）
-8. 小説のように読めるストーリー（体験談、エピソード）`;
-
-  const USER_PROMPT = `AIバーテンダー「麦（むぎ）」として、以下のテーマでnote記事を執筆してください。
-
-【テーマ】
-${theme}
-
-【要件】
-- 麦（むぎ）として語りかけるような文体
-- タイトルは魅力的で具体的に（数字や具体例を含める）
-- 本文は2000-3000文字
-- Markdown形式で出力
-- 見出し（##）を3-5個使用
-- 具体例を豊富に
-- **バズる要素を複数含める**（リスト形式、具体的な数字、保存したくなる情報）
-- バーでの会話のような親しみやすい雰囲気
 
 以下のJSON形式で出力してください：
 \`\`\`json
@@ -129,7 +105,7 @@ ${theme}
 }
 \`\`\``;
 
-  const response = await generateText(SYSTEM_PROMPT, USER_PROMPT, 4096);
+  const response = await generateText(MUGI_SYSTEM_PROMPT, USER_PROMPT, 4096);
 
   // JSON部分を抽出
   const jsonMatch = response.match(/```json\n([\s\S]+?)\n```/);

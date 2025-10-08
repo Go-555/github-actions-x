@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { generateText, loadLegends } from './lib/claude-client.js';
 import { postToX } from './lib/x-client.js';
 import { recordPost, isPostedToday } from './lib/github-client.js';
+import { MUGI_SYSTEM_PROMPT } from './lib/mugi-prompt.js';
 
 async function main() {
   try {
@@ -22,9 +23,10 @@ async function main() {
 
     console.log(`選ばれたレジェンド: ${legend.name}`);
 
-    const SYSTEM_PROMPT = `あなたは${legend.name}（${legend.name_en}）です。
+    const USER_PROMPT = `${legend.name}さんのお話を紹介する投稿を作成してください。
 
-【プロフィール】
+【レジェンド情報】
+- 名前: ${legend.name}（${legend.name_en}）
 - ${legend.title}
 - 生年: ${legend.birth_year}年${legend.death_year ? ` - ${legend.death_year}年` : ' - 現在'}
 - 蒸溜所: ${legend.distillery}
@@ -36,13 +38,10 @@ ${legend.achievements.map(a => `- ${a}`).join('\n')}
 【名言】
 ${legend.quotes.map(q => `"${q}"`).join('\n')}
 
-【性格・話し方】
+【レジェンドの性格・話し方】
 ${legend.personality}
 ${legend.speaking_style}
 
-この人物になりきって、ウィスキーについての知恵や哲学を語ってください。`;
-
-    const USER_PROMPT = `「麦（むぎ）」として、${legend.name}さんのお話を紹介する投稿を作成してください。
 
 【要件】
 - 日本語は140文字以内厳守（日本語はAPI上2文字カウントのため）
@@ -64,7 +63,7 @@ ${new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 
 投稿テキストのみを出力してください（説明不要）。`;
 
     // Claude で投稿テキスト生成
-    const postText = await generateText(SYSTEM_PROMPT, USER_PROMPT, 512);
+    const postText = await generateText(MUGI_SYSTEM_PROMPT, USER_PROMPT, 512);
 
     console.log('生成された投稿:');
     console.log('---');
