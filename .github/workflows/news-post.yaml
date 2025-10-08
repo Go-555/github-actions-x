@@ -16,6 +16,7 @@ jobs:
     permissions:
       contents: read
       secrets: write
+      issues: write
 
     steps:
       - name: Checkout
