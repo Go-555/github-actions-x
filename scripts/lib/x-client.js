@@ -39,7 +39,10 @@ export async function refreshAccessToken() {
       await updateGitHubSecret('X_OAUTH2_REFRESH_TOKEN', newRefreshToken);
     }
 
-    return { client: refreshedClient, accessToken, refreshToken: newRefreshToken };
+    // アクセストークンを使って新しいクライアントを作成
+    const authenticatedClient = new TwitterApi(accessToken);
+
+    return { client: authenticatedClient, accessToken, refreshToken: newRefreshToken };
   } catch (error) {
     console.error('❌ アクセストークン更新エラー:', error.message);
     console.error('エラー詳細:', error);
